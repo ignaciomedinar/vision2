@@ -1,0 +1,9 @@
+- símbolos
+- imágenes vectores, dónde
+- signo de + que se esconda
+- en la animación que aparezcan proyectos hasta después
+- alineación signo + en Pagos
+- recomendaciones
+
+
+- checar el responsivo, está raro para sm y md

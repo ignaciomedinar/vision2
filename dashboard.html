@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <title>Vision</title>
+</head>
+<body>
+    <div id="wrapper">
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
+            <a class="navbar-brand" href="#">Logo</a>
+            <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="nav justify-content-end navbar-nav ml-auto mt-2 mt-lg-0">
+                    
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Active</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="d-flex main">
+            <div class="menu-wrapper hide">
+                
+                <nav class="bg-light border-left sidebar-wrapper hide" id="sidebar-wrapper"> <!-- id="sidebar-wrapper" -->
+                    <li class="nav-item">
+                        <img src="images/toggle2.png" id="toggle" alt="Toggle" height="20" width="20" >
+                        
+                    </li>
+                    <div class="sidebar-heading">
+                        
+                        <div class="form-label-group">
+                            <input
+                                type="text"
+                                id="searchInput"
+                                class="form-control"
+                                placeholder="Buscar"
+                                required
+                                autofocus
+                            />
+                            <label for="searchInput"></label>
+                        </div>
+                    </div>
+                    <ul class="nav flex-column">
+                        
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Proyecto1</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Proyecto2</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Proyecto3</a>
+                        </li>
+                        <li class="nav-item add">
+                            <img src="images/add2.svg" alt="add" height="30" width="30">
+                        </li>
+                    </ul>
+                </nav>
+
+            </div>
+            <div class="content-wrapper">
+                <h2 class="mt-4">Proyecto 1</h1>
+                    <div class="container-fluid">
+
+                        <div class="row">
+                            <div class="col col-md-4 col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        General
+                                    </div>
+                                    <div class="card-body">
+                                        cuadro1
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col col-md-4 col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        Pagos
+                                        <img class="float-right" src="images/add2.svg" alt="add" height="30" width="30">
+                                    </div>
+                                    <div class="card-body">
+                                        cuadro2
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col col-md-4 col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        Gastos
+                                        <img class="float-right" src="images/add2.svg" alt="add" height="30" width="30">
+                                    </div>
+                                    <div class="card-body">
+                                        cuadro3
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="app.js"></script>
+</body>
+</html>

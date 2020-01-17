@@ -8,6 +8,12 @@ $("#toggle").click(function() {
   }, 500);
 });
 
+var formatter = new Intl.NumberFormat("es-MX", {
+  style: "currency",
+  currency: "MXN",
+  minimumFractionDigits: 2
+});
+
 const proyecto_uno = {
   id: 1,
   nombre: "Proyecto 1",
@@ -52,15 +58,113 @@ const proyecto_uno = {
       concepto: "Provedor",
       fechag: "11/12/2019",
       montog: 80000
-    },
+    }
   ],
   utilidad: 30,
   disponible: []
 };
 
-function formateaComoDinero(valor) {
-  return `$ ${valor}`;
-}
+const proyecto_dos = {
+  id: 2,
+  nombre: "Proyecto 2",
+  costo_total: 2000000,
+  pagos_recibidos: [
+    {
+      monto: 50000,
+      fecha: "10/12/2019"
+    },
+    {
+      monto: 7000,
+      fecha: "10/12/2019"
+    },
+    {
+      monto: 10000,
+      fecha: "10/12/2019"
+    },
+    {
+      monto: 33400,
+      fecha: "10/12/2019"
+    }
+  ],
+  pagos_tentativos: [
+    {
+      monto: 25000,
+      fecha: "20/03/2020"
+    },
+    {
+      monto: 40000,
+      fecha: "20/04/2020"
+    }
+  ],
+  gastos: [
+    {
+      ejecutivo: "Pedro",
+      concepto: "Avión",
+      fechag: "15/12/2019",
+      montog: 30000
+    },
+    {
+      ejecutivo: "Juan",
+      concepto: "Provedor",
+      fechag: "11/12/2019",
+      montog: 70000
+    }
+  ],
+  utilidad: 20,
+  disponible: []
+};
+
+const proyecto_tres = {
+  id: 3,
+  nombre: "Proyecto 3",
+  costo_total: 3000000,
+  pagos_recibidos: [
+    {
+      monto: 30000,
+      fecha: "10/12/2019"
+    },
+    {
+      monto: 6000,
+      fecha: "10/12/2019"
+    },
+    {
+      monto: 60000,
+      fecha: "10/12/2019"
+    },
+    {
+      monto: 63400,
+      fecha: "10/12/2019"
+    }
+  ],
+  pagos_tentativos: [
+    {
+      monto: 5000,
+      fecha: "20/03/2020"
+    },
+    {
+      monto: 20000,
+      fecha: "20/04/2020"
+    }
+  ],
+  gastos: [
+    {
+      ejecutivo: "Pedro",
+      concepto: "Avión",
+      fechag: "15/12/2019",
+      montog: 20000
+    },
+    {
+      ejecutivo: "Juan",
+      concepto: "Provedor",
+      fechag: "11/12/2019",
+      montog: 90000
+    }
+  ],
+  utilidad: 40,
+  disponible: []
+};
+
+const arregloProyectos = [proyecto_uno, proyecto_dos, proyecto_tres];
 
 // revisar reduce
 // ${proyecto_uno.pagos_recibidos.reduce(
@@ -72,7 +176,7 @@ function sumaPagos(arrPagos) {
   arrPagos.forEach(pago => {
     suma += pago.monto;
   });
-  return suma;
+  return suma.toFixed(2);
 }
 
 function sumaGastos(arrGastos) {
@@ -83,14 +187,60 @@ function sumaGastos(arrGastos) {
   return suma;
 }
 
-function montoDisponible(costo,utilidad,arrGastos){
-  var montoi = costo * ((100-utilidad)/100);
+function montoDisponible(costo, utilidad, arrGastos) {
+  var montoi = costo * ((100 - utilidad) / 100);
   var gastos = sumaGastos(arrGastos);
   var disponible = montoi - gastos;
   return disponible;
 }
 
-const proyectoContainer = `
+// function declaration
+// function cargaproyecto () {
+
+// }
+
+// funciont expression
+// const cargaProyecto = function () {
+
+// }
+
+// function expression con arrow function
+// const cargaProyecto = () => {}
+
+const linkProyectos = document.querySelectorAll(".nav-link").forEach(item => {
+  item.addEventListener("click", event => {
+    const id_proyecto = item.dataset.id;
+    cargaProyecto(id_proyecto);
+  });
+});
+
+function formatMoney(number, decPlaces, decSep, thouSep) {
+  (decPlaces = isNaN((decPlaces = Math.abs(decPlaces))) ? 2 : decPlaces),
+    (decSep = typeof decSep === "undefined" ? "." : decSep);
+  thouSep = typeof thouSep === "undefined" ? "," : thouSep;
+  var sign = number < 0 ? "-" : "";
+  var i = String(
+    parseInt((number = Math.abs(Number(number) || 0).toFixed(decPlaces)))
+  );
+  var j = (j = i.length) > 3 ? j % 3 : 0;
+  var k = (k = i.length) > 6 ? k % 6 : 0;
+
+  return (
+    "$ " +
+    sign +
+    (j ? i.substr(0, j) + thouSep : "") +
+    i.substr(j).replace(/(\decSep{3})(?=\decSep)/g, "$1" + thouSep) +
+    (decPlaces
+      ? decSep +
+        Math.abs(number - i)
+          .toFixed(decPlaces)
+          .slice(2)
+      : "")
+  );
+}
+
+const generarProyectoContainer = proyecto_elegido => {
+  return `
 <div class="card">
     <div class="card-header">
       <h4>General
@@ -98,16 +248,33 @@ const proyectoContainer = `
       </h4>
     </div>
     <div class="card-body">
-        <strong>Costo total:</strong> ${formatMoney(proyecto_uno.costo_total)} <br>
-        <strong>Pagos recibidos:</strong> ${formatMoney(sumaPagos(proyecto_uno.pagos_recibidos))} <br>
-        <strong>Gastos:</strong> ${formatMoney(sumaGastos(proyecto_uno.gastos))} <br>
-        <strong>Utilidad proyectada:</strong> ${proyecto_uno.utilidad}%<br>
-        <strong>Monto disponible:</strong> ${formatMoney(montoDisponible(proyecto_uno.costo_total,proyecto_uno.utilidad,proyecto_uno.gastos),2,".",",")}
+        <strong>Costo total:</strong> ${formatter.format(
+          proyecto_elegido.costo_total
+        )} <br>
+        <strong>Pagos recibidos:</strong> ${formatter.format(
+          sumaPagos(proyecto_elegido.pagos_recibidos)
+        )} <br>
+        <strong>Gastos:</strong> ${formatter.format(
+          sumaGastos(proyecto_elegido.gastos)
+        )} <br>
+        <strong>Utilidad proyectada:</strong> ${proyecto_elegido.utilidad}%<br>
+        <strong>Monto disponible:</strong> ${formatter.format(
+          montoDisponible(
+            proyecto_elegido.costo_total,
+            proyecto_elegido.utilidad,
+            proyecto_elegido.gastos
+          ),
+          2,
+          ".",
+          ","
+        )}
     </div>
 </div>
 `;
+};
 
-const pagosContainer = `
+const generarPagosContainer = proyecto_elegido => {
+  return `
 <div class="card">
     <div class="card-header">
       <h4>Pagos
@@ -115,20 +282,25 @@ const pagosContainer = `
       </h4>
     </div>
     <div class="card-body">
-      <h5>Hechos <div class="float-right">${sumaPagos(proyecto_uno.pagos_recibidos)*100/proyecto_uno.costo_total}%
+      <h5>Hechos <div class="float-right">${(
+        (sumaPagos(proyecto_elegido.pagos_recibidos) * 100) /
+        proyecto_elegido.costo_total
+      ).toFixed(2)}%
         </div></h5>
-        Total: ${formatMoney(sumaPagos(proyecto_uno.pagos_recibidos))}<br>
-        ${proyecto_uno.pagos_recibidos
+        Total: ${formatter.format(
+          sumaPagos(proyecto_elegido.pagos_recibidos)
+        )}<br>
+        ${proyecto_elegido.pagos_recibidos
           .map(pago => {
-            return `<strong>${pago.fecha}</strong>: ${formatMoney(
+            return `<strong>${pago.fecha}</strong>: ${formatter.format(
               pago.monto
             )}<br>`;
           })
           .join("")}
       <h5>Tentativos</h5>
-        ${proyecto_uno.pagos_tentativos
+        ${proyecto_elegido.pagos_tentativos
           .map(pago => {
-            return `<strong>${pago.fecha}</strong>: ${formatMoney(
+            return `<strong>${pago.fecha}</strong>: ${formatter.format(
               pago.monto
             )}<br>`;
           })
@@ -137,8 +309,10 @@ const pagosContainer = `
     </div>
 </div>
 `;
+};
 
-const gastosContainer = `
+const generarGastosContainer = proyecto_elegido => {
+  return `
 <div class="card">
     <div class="card-header">
       <h4>Gastos
@@ -146,43 +320,44 @@ const gastosContainer = `
       </h4>
     </div>
     <div class="card-body">
-      ${proyecto_uno.gastos
+      ${proyecto_elegido.gastos
         .map(gasto => {
-          return `<strong>${gasto.ejecutivo} - ${(gasto.concepto)}</strong><br>
-          ${gasto.fechag}: ${formatMoney(
-            gasto.montog
-          )}<br>
+          return `<strong>${gasto.ejecutivo} - ${gasto.concepto}</strong><br>
+          ${gasto.fechag}: ${formatter.format(gasto.montog)}<br>
           `;
         })
         .join("")}
     </div>
 </div>
 `;
-
-const cargaProyecto = () => {
-  document.getElementById("titulo").innerHTML = `<div> ${proyecto_uno.nombre}</div>`;
-  document.getElementById("proyecto").innerHTML = proyectoContainer;
-  document.getElementById("pagos").innerHTML = pagosContainer;
-  document.getElementById("gastos").innerHTML = gastosContainer;
 };
 
-const linkProyectos = document.querySelectorAll(".nav-link").forEach(item => {
-  item.addEventListener("click", event => {
-    cargaProyecto();
-  });
-});
-
-function formatMoney(number, decPlaces, decSep, thouSep) {
-  decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 2 : decPlaces,
-  decSep = typeof decSep === "undefined" ? "." : decSep;
-  thouSep = typeof thouSep === "undefined" ? "," : thouSep;
-  var sign = number < 0 ? "-" : "";
-  var i = String(parseInt(number = Math.abs(Number(number) || 0).toFixed(decPlaces)));
-  var j = (j = i.length) > 3 ? j % 3 : 0;
-  var k = (k = i.length) > 6 ? k % 6 : 0;
-  
-  return "$ " + sign +
-    (j ? i.substr(0, j) + thouSep : "") +
-    i.substr(j).replace(/(\decSep{3})(?=\decSep)/g, "$1" + thouSep) +
-    (decPlaces ? decSep + Math.abs(number - i).toFixed(decPlaces).slice(2) : "");
+const cargaProyecto = id_proyecto_click => {
+  var proyecto_elegido = arregloProyectos[0];
+  // const proyecto_elegido = arregloProyectos.find(obj => obj.id === id_proyecto_click)
+  // const proyecto_elegido = arregloProyectos.find(function(obj){
+  //   return obj.id === id_proyecto_click
+  // })
+  for (var i = 0; i < arregloProyectos.length; i++) {
+    if (arregloProyectos[i].id === Number(id_proyecto_click)) {
+      proyecto_elegido = arregloProyectos[i];
+    }
   }
+
+  if (proyecto_elegido === "undefined") {
+    console.log("No se encontró");
+    return;
+  }
+  document.getElementById(
+    "titulo"
+  ).innerHTML = `<div> ${proyecto_elegido.nombre}</div>`;
+  document.getElementById("proyecto").innerHTML = generarProyectoContainer(
+    proyecto_elegido
+  );
+  document.getElementById("pagos").innerHTML = generarPagosContainer(
+    proyecto_elegido
+  );
+  document.getElementById("gastos").innerHTML = generarGastosContainer(
+    proyecto_elegido
+  );
+};

@@ -64,20 +64,9 @@
                             <label for="searchInput"></label>
                         </div>
                     </div>
-                    <ul class="nav flex-column">
+                    <ul class="nav flex-column" id="menu">
                         
-                        <li class="nav-item">
-                            <a class="nav-link active" data-id="1">Proyecto1</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-id="2">Proyecto2</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-id="3">Proyecto3</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-id="5">Proyecto5</a>
-                        </li>
+                        
                         <li class="nav-item add">
                             <img src="images/mas.svg" alt="add" height="25" width="25">
                         </li>
@@ -97,6 +86,24 @@
                                
                             </div>
                             <div class="col col-md-4 col-sm-12" id="gastos">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h3>Alta de proyecto</h3>
+                                <form id="forma-alta">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Nombre del proyecto" name="nombre">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="number" class="form-control" placeholder="Costo del proyecto" name="costo_total">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="range" min="10" max="100" step="1" class="form-control" placeholder="Utilidad proyectada" name="utilidad">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Crear</button>
+                                </form>
                             </div>
                         </div>
                     </div>

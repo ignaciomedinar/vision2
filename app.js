@@ -171,6 +171,27 @@ const arregloProyectos = [proyecto_uno, proyecto_dos, proyecto_tres];
 //     (a, b) => a.monto + b.monto
 //   )}
 
+const menu = document.getElementById("menu");
+
+const cargaMenu = () => {
+  // orden de ultimo a id a menor
+  const arrSort = arregloProyectos.sort((a, b) => b.id - a.id);
+  // agarro los ultimos n elementos para mostrar
+  arrSort.splice(6);
+  menu.innerHTML = arrSort
+    .map(proyecto => {
+      return `
+    <li class="nav-item">
+      <a class="nav-link active" data-id="${proyecto.id}">${proyecto.nombre}</a>
+    </li>
+    `;
+    })
+    .join("");
+};
+
+cargaMenu();
+cargaEventosClickMenu();
+
 function sumaPagos(arrPagos) {
   var suma = 0;
   arrPagos.forEach(pago => {
@@ -206,13 +227,14 @@ function montoDisponible(costo, utilidad, arrGastos) {
 
 // function expression con arrow function
 // const cargaProyecto = () => {}
-
-const linkProyectos = document.querySelectorAll(".nav-link").forEach(item => {
-  item.addEventListener("click", event => {
-    const id_proyecto = item.dataset.id;
-    cargaProyecto(id_proyecto);
+function cargaEventosClickMenu() {
+  const linkProyectos = document.querySelectorAll(".nav-link").forEach(item => {
+    item.addEventListener("click", event => {
+      const id_proyecto = item.dataset.id;
+      cargaProyecto(id_proyecto);
+    });
   });
-});
+}
 
 function formatMoney(number, decPlaces, decSep, thouSep) {
   (decPlaces = isNaN((decPlaces = Math.abs(decPlaces))) ? 2 : decPlaces),
@@ -361,3 +383,32 @@ const cargaProyecto = id_proyecto_click => {
     proyecto_elegido
   );
 };
+
+// añadir proyecto
+const altaProyecto = (nombre, costo_total, utilidad) => {
+  const proyecto = new Proyecto(nombre, costo_total, utilidad);
+  arregloProyectos.push(proyecto);
+  cargaMenu();
+  cargaEventosClickMenu();
+};
+
+const formaAlta = document.getElementById("forma-alta");
+formaAlta.addEventListener("submit", e => {
+  e.preventDefault();
+  const nombre = document.getElementsByName("nombre")[0].value;
+  const costo_total = document.getElementsByName("costo_total")[0].value;
+  const utilidad = document.getElementsByName("utilidad")[0].value;
+  altaProyecto(nombre, costo_total, utilidad);
+});
+
+function Proyecto(nombre = "Proyecto nuevo", costo_total = 0, utilidad = 100) {
+  ultimoIndice = arregloProyectos.length;
+  this.id = arregloProyectos[ultimoIndice - 1].id + 1;
+  (this.nombre = nombre),
+    (this.costo_total = costo_total),
+    (this.pagos_recibidos = []),
+    (this.pagos_tentativos = []),
+    (this.gastos = []),
+    (this.utilidad = utilidad),
+    (this.disponible = []);
+}

@@ -14,162 +14,52 @@ var formatter = new Intl.NumberFormat("es-MX", {
   minimumFractionDigits: 2
 });
 
-const proyecto_uno = {
-  id: 1,
-  nombre: "Proyecto 1",
-  costo_total: 1000000,
-  pagos_recibidos: [
-    {
-      monto: 10000,
-      fecha: "10/12/2019"
-    },
-    {
-      monto: 5000,
-      fecha: "10/12/2019"
-    },
-    {
-      monto: 40000,
-      fecha: "10/12/2019"
-    },
-    {
-      monto: 23400,
-      fecha: "10/12/2019"
-    }
-  ],
-  pagos_tentativos: [
-    {
-      monto: 15000,
-      fecha: "20/03/2020"
-    },
-    {
-      monto: 30000,
-      fecha: "20/04/2020"
-    }
-  ],
-  gastos: [
-    {
-      ejecutivo: "Pedro",
-      concepto: "Avión",
-      fechag: "15/12/2019",
-      montog: 10000
-    },
-    {
-      ejecutivo: "Juan",
-      concepto: "Provedor",
-      fechag: "11/12/2019",
-      montog: 80000
-    }
-  ],
-  utilidad: 30,
-  disponible: []
+let arregloProyectos = [];
+// cargar proyectos y actualizar menu
+const loadProjects = projectos => {
+  arregloProyectos = [...projectos];
+  cargaMenu();
+  cargaEventosClickMenu();
 };
 
-const proyecto_dos = {
-  id: 2,
-  nombre: "Proyecto 2",
-  costo_total: 2000000,
-  pagos_recibidos: [
-    {
-      monto: 50000,
-      fecha: "10/12/2019"
-    },
-    {
-      monto: 7000,
-      fecha: "10/12/2019"
-    },
-    {
-      monto: 10000,
-      fecha: "10/12/2019"
-    },
-    {
-      monto: 33400,
-      fecha: "10/12/2019"
-    }
-  ],
-  pagos_tentativos: [
-    {
-      monto: 25000,
-      fecha: "20/03/2020"
-    },
-    {
-      monto: 40000,
-      fecha: "20/04/2020"
-    }
-  ],
-  gastos: [
-    {
-      ejecutivo: "Pedro",
-      concepto: "Avión",
-      fechag: "15/12/2019",
-      montog: 30000
-    },
-    {
-      ejecutivo: "Juan",
-      concepto: "Provedor",
-      fechag: "11/12/2019",
-      montog: 70000
-    }
-  ],
-  utilidad: 20,
-  disponible: []
+// solicitar los proyectos al API
+const getProjects = () => {
+  var url = "http://localhost:8080/api/proyectos";
+  fetch(url)
+    .then(res => res.json())
+    .catch(error => console.error("Error:", error))
+    .then(response => loadProjects(response.data));
 };
 
-const proyecto_tres = {
-  id: 3,
-  nombre: "Proyecto 3",
-  costo_total: 3000000,
-  pagos_recibidos: [
-    {
-      monto: 30000,
-      fecha: "10/12/2019"
-    },
-    {
-      monto: 6000,
-      fecha: "10/12/2019"
-    },
-    {
-      monto: 60000,
-      fecha: "10/12/2019"
-    },
-    {
-      monto: 63400,
-      fecha: "10/12/2019"
-    }
-  ],
-  pagos_tentativos: [
-    {
-      monto: 5000,
-      fecha: "20/03/2020"
-    },
-    {
-      monto: 20000,
-      fecha: "20/04/2020"
-    }
-  ],
-  gastos: [
-    {
-      ejecutivo: "Pedro",
-      concepto: "Avión",
-      fechag: "15/12/2019",
-      montog: 20000
-    },
-    {
-      ejecutivo: "Juan",
-      concepto: "Provedor",
-      fechag: "11/12/2019",
-      montog: 90000
-    }
-  ],
-  utilidad: 40,
-  disponible: []
+getProjects();
+
+// añadir nuevo proyecto
+const altaProyecto = (nombre, costo_total, utilidad) => {
+  const proyecto = new Proyecto(nombre, costo_total, utilidad);
+  createProject(proyecto);
+  cargaMenu();
+  cargaEventosClickMenu();
 };
 
-const arregloProyectos = [proyecto_uno, proyecto_dos, proyecto_tres];
-
-// revisar reduce
-// ${proyecto_uno.pagos_recibidos.reduce(
-//     (a, b) => a.monto + b.monto
-//   )}
+// API para crear un nuevo proyecto
+const createProject = project => {
+  var url = "http://localhost:8080/api/proyectos";
+  const data = JSON.stringify(project);
+  console.log(data);
+  fetch(url, {
+    method: "POST", // or 'PUT'
+    body: data, // data can be `string` or {object}!
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+    .then(res => res.json())
+    .catch(error => console.error("Error:", error))
+    .then(response => {
+      formaAlta.reset()
+      getProjects();
+    });
+};
 
 const menu = document.getElementById("menu");
 
@@ -188,9 +78,6 @@ const cargaMenu = () => {
     })
     .join("");
 };
-
-cargaMenu();
-cargaEventosClickMenu();
 
 function sumaPagos(arrPagos) {
   var suma = 0;
@@ -215,18 +102,6 @@ function montoDisponible(costo, utilidad, arrGastos) {
   return disponible;
 }
 
-// function declaration
-// function cargaproyecto () {
-
-// }
-
-// funciont expression
-// const cargaProyecto = function () {
-
-// }
-
-// function expression con arrow function
-// const cargaProyecto = () => {}
 function cargaEventosClickMenu() {
   const linkProyectos = document.querySelectorAll(".nav-link").forEach(item => {
     item.addEventListener("click", event => {
@@ -234,31 +109,6 @@ function cargaEventosClickMenu() {
       cargaProyecto(id_proyecto);
     });
   });
-}
-
-function formatMoney(number, decPlaces, decSep, thouSep) {
-  (decPlaces = isNaN((decPlaces = Math.abs(decPlaces))) ? 2 : decPlaces),
-    (decSep = typeof decSep === "undefined" ? "." : decSep);
-  thouSep = typeof thouSep === "undefined" ? "," : thouSep;
-  var sign = number < 0 ? "-" : "";
-  var i = String(
-    parseInt((number = Math.abs(Number(number) || 0).toFixed(decPlaces)))
-  );
-  var j = (j = i.length) > 3 ? j % 3 : 0;
-  var k = (k = i.length) > 6 ? k % 6 : 0;
-
-  return (
-    "$ " +
-    sign +
-    (j ? i.substr(0, j) + thouSep : "") +
-    i.substr(j).replace(/(\decSep{3})(?=\decSep)/g, "$1" + thouSep) +
-    (decPlaces
-      ? decSep +
-        Math.abs(number - i)
-          .toFixed(decPlaces)
-          .slice(2)
-      : "")
-  );
 }
 
 const generarProyectoContainer = proyecto_elegido => {
@@ -384,14 +234,6 @@ const cargaProyecto = id_proyecto_click => {
   );
 };
 
-// añadir proyecto
-const altaProyecto = (nombre, costo_total, utilidad) => {
-  const proyecto = new Proyecto(nombre, costo_total, utilidad);
-  arregloProyectos.push(proyecto);
-  cargaMenu();
-  cargaEventosClickMenu();
-};
-
 const formaAlta = document.getElementById("forma-alta");
 formaAlta.addEventListener("submit", e => {
   e.preventDefault();
@@ -402,13 +244,7 @@ formaAlta.addEventListener("submit", e => {
 });
 
 function Proyecto(nombre = "Proyecto nuevo", costo_total = 0, utilidad = 100) {
-  ultimoIndice = arregloProyectos.length;
-  this.id = arregloProyectos[ultimoIndice - 1].id + 1;
-  (this.nombre = nombre),
-    (this.costo_total = costo_total),
-    (this.pagos_recibidos = []),
-    (this.pagos_tentativos = []),
-    (this.gastos = []),
-    (this.utilidad = utilidad),
-    (this.disponible = []);
+  this.nombre = nombre;
+  this.costo_total = Number(costo_total);
+  this.utilidad = Number(utilidad);
 }
